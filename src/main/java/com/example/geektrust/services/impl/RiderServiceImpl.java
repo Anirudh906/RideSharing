@@ -9,7 +9,11 @@ import java.util.Map;
 
 public class RiderServiceImpl implements RiderService {
 
-  private final Map<String, Rider> riders = new HashMap<>();
+  private final Map<String, Rider> riders;
+
+  public RiderServiceImpl() {
+    this.riders = new HashMap<>();
+  }
 
   @Override
   public void addRider(String riderId, Long xCoordinate, Long yCoordinate) {
@@ -31,5 +35,13 @@ public class RiderServiceImpl implements RiderService {
       throw new RiderDoesntExistException("Rider with ID " + riderId + " does not exist.");
     }
     return riders.get(riderId).getCoordinates();
+  }
+
+  @Override
+  public void updateRiderCoordinates(String riderId, Coordinates endCoordinates) {
+    if (!riders.containsKey(riderId)) {
+      throw new RiderDoesntExistException("Rider with ID " + riderId + " does not exist.");
+    }
+    riders.get(riderId).updateCoordinates(endCoordinates);
   }
 }

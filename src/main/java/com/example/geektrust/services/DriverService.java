@@ -9,7 +9,9 @@ public interface DriverService {
 
   Coordinates getDriverCoordinates(String driverId);
 
-  void markDriverUnavailable(String driverId);
+  void updateDriverAvailability(String driverId, Boolean availability);
 
   Map<String, Driver> getAllDrivers();
+
+  void updateDriverCoordinates(String driverId, Coordinates coordinates);
 }

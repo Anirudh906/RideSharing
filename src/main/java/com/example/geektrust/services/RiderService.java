@@ -8,4 +8,6 @@ public interface RiderService {
   void addRider(String riderId, Long xCoordinate, Long yCoordinate);
 
   Boolean isRiderRiding(String riderId);
+
+  void updateRiderCoordinates(String riderId, Coordinates endCoordinates);
 }

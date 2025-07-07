@@ -18,4 +18,8 @@ public class Rider {
   public Coordinates getCoordinates() {
     return riderCoordinates;
   }
+
+  public void updateCoordinates(Coordinates newCoordinates) {
+    this.riderCoordinates = newCoordinates;
+  }
 }

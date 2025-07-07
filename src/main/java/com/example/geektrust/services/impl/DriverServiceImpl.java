@@ -8,7 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DriverServiceImpl implements DriverService {
-  private Map<String, Driver> drivers = new HashMap<>();
+  private final Map<String, Driver> drivers;
+
+  public DriverServiceImpl() {
+    this.drivers = new HashMap<>();
+  }
 
   @Override
   public void addDriver(String driverId, Long xCoordinate, Long yCoordinate) {
@@ -25,11 +29,11 @@ public class DriverServiceImpl implements DriverService {
   }
 
   @Override
-  public void markDriverUnavailable(String driverId) {
+  public void updateDriverAvailability(String driverId, Boolean availability) {
     if (!drivers.containsKey(driverId)) {
       throw new DriverDoesntExistException("Driver with ID " + driverId + " does not exist.");
     }
-    drivers.get(driverId).updateAvailability(false);
+    drivers.get(driverId).updateAvailability(availability);
   }
 
   @Override
@@ -42,5 +46,13 @@ public class DriverServiceImpl implements DriverService {
       }
     }
     return allDrivers;
+  }
+
+  @Override
+  public void updateDriverCoordinates(String driverId, Coordinates coordinates) {
+    if (!drivers.containsKey(driverId)) {
+      throw new DriverDoesntExistException("Driver with ID " + driverId + " does not exist.");
+    }
+    drivers.get(driverId).updateCoordinates(coordinates);
   }
 }
