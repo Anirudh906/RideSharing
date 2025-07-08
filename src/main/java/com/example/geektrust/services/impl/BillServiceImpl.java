@@ -1,10 +1,6 @@
 package com.example.geektrust.services.impl;
 
-import static com.example.geektrust.constants.CommonConstants.BASE_FARE;
-import static com.example.geektrust.constants.CommonConstants.FARE_PER_KM;
-import static com.example.geektrust.constants.CommonConstants.FARE_PER_MINUTE;
-import static com.example.geektrust.constants.CommonConstants.ROUND_SCALE;
-import static com.example.geektrust.constants.CommonConstants.SERVICE_TAX_MULTIPLIER;
+import static com.example.geektrust.constants.CommonConstants.*;
 
 import com.example.geektrust.services.BillService;
 import java.math.BigDecimal;
@@ -14,10 +10,24 @@ public class BillServiceImpl implements BillService {
 
   @Override
   public BigDecimal getRideBill(BigDecimal rideDistance, Long rideTime) {
-    BigDecimal distanceFare = rideDistance.multiply(FARE_PER_KM);
-    BigDecimal timeFare = BigDecimal.valueOf(rideTime).multiply(FARE_PER_MINUTE);
+    rideDistance = rideDistance.setScale(ROUND_SCALE_TWO, RoundingMode.HALF_UP);
+
+    BigDecimal distanceFare = getDistanceFare(rideDistance);
+    BigDecimal timeFare = getTimeFare(rideTime);
     BigDecimal totalFare = distanceFare.add(timeFare).add(BigDecimal.valueOf(BASE_FARE));
-    BigDecimal fareWithServiceTax = totalFare.multiply(SERVICE_TAX_MULTIPLIER);
-    return fareWithServiceTax.setScale(ROUND_SCALE, RoundingMode.CEILING);
+
+    return totalFare
+        .multiply(SERVICE_TAX_MULTIPLIER)
+        .setScale(ROUND_SCALE_TWO, RoundingMode.HALF_UP);
+  }
+
+  private BigDecimal getDistanceFare(BigDecimal rideDistance) {
+    return rideDistance.multiply(FARE_PER_KM).setScale(ROUND_SCALE_TWO, RoundingMode.HALF_UP);
+  }
+
+  private BigDecimal getTimeFare(Long rideTime) {
+    return BigDecimal.valueOf(rideTime)
+        .multiply(FARE_PER_MINUTE)
+        .setScale(ROUND_SCALE_TWO, RoundingMode.HALF_UP);
   }
 }

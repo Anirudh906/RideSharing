@@ -53,6 +53,8 @@ public class DriverServiceImpl implements DriverService {
     if (!drivers.containsKey(driverId)) {
       throw new DriverDoesntExistException("Driver with ID " + driverId + " does not exist.");
     }
-    drivers.get(driverId).updateCoordinates(coordinates);
+    drivers
+        .get(driverId)
+        .updateCoordinates(coordinates.getXCoordinate(), coordinates.getYCoordinate());
   }
 }

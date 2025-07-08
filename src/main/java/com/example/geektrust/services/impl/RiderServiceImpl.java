@@ -22,14 +22,6 @@ public class RiderServiceImpl implements RiderService {
   }
 
   @Override
-  public Boolean isRiderRiding(String riderId) {
-    if (!riders.containsKey(riderId)) {
-      throw new RiderDoesntExistException("Rider with ID " + riderId + " does not exist.");
-    }
-    return riders.get(riderId).isRiderRiding();
-  }
-
-  @Override
   public Coordinates getRiderCoordinates(String riderId) {
     if (!riders.containsKey(riderId)) {
       throw new RiderDoesntExistException("Rider with ID " + riderId + " does not exist.");

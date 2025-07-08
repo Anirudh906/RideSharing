@@ -1,25 +1,25 @@
 package com.example.geektrust.domain.internal;
 
+import lombok.Getter;
+
 public class Rider {
-  private String id;
+  @Getter private String id;
   private Coordinates riderCoordinates;
-  private Boolean isRiding;
 
   public Rider(String id, Long xCoordinate, Long yCoordinate) {
     this.id = id;
     this.riderCoordinates = new Coordinates(xCoordinate, yCoordinate);
-    this.isRiding = false;
-  }
-
-  public Boolean isRiderRiding() {
-    return isRiding;
   }
 
   public Coordinates getCoordinates() {
-    return riderCoordinates;
+    return new Coordinates(riderCoordinates.getXCoordinate(), riderCoordinates.getYCoordinate());
   }
 
   public void updateCoordinates(Coordinates newCoordinates) {
-    this.riderCoordinates = newCoordinates;
+    if (newCoordinates == null) {
+      throw new IllegalArgumentException("New coordinates cannot be null");
+    }
+    this.riderCoordinates =
+        new Coordinates(newCoordinates.getXCoordinate(), newCoordinates.getYCoordinate());
   }
 }

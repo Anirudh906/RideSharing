@@ -19,9 +19,8 @@ public class Driver {
     this.isAvailable = isAvailable;
   }
 
-  public void updateCoordinates(Coordinates coordinates) {
-    this.driverCoordinates.setXCoordinate(coordinates.getXCoordinate());
-    this.driverCoordinates.setYCoordinate(coordinates.getYCoordinate());
+  public void updateCoordinates(Long xCoordinate, Long yCoordinate) {
+    this.driverCoordinates = new Coordinates(xCoordinate, yCoordinate);
   }
 
   public Coordinates getCoordinates() {
