@@ -1,6 +1,6 @@
 package com.example.geektrust.domain.internal;
 
-import static com.example.geektrust.constants.CommonConstants.*;
+import static com.example.geektrust.constants.CommonConstants.INITIAL_RIDE_TIME;
 
 import java.math.BigDecimal;
 
@@ -23,11 +23,11 @@ public class Ride {
     this.isRideCompleted = false;
   }
 
-  public void completeRide(BigDecimal rideBill, Long rideTime, BigDecimal rideDistanceInKm) {
-    this.rideBill = rideBill;
-    this.rideTime = rideTime;
-    this.rideDistanceInKm = rideDistanceInKm;
-    this.isRideCompleted = true;
+  public void completeRide(RideDetails details) {
+    this.rideBill = details.getRideBill();
+    this.rideTime = details.getRideTime();
+    this.rideDistanceInKm = details.getRideDistanceInKm();
+    this.isRideCompleted = details.getIsRideCompleted();
   }
 
   public RideDetails getRideDetails() {
