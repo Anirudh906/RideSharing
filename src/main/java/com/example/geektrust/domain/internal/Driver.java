@@ -23,6 +23,10 @@ public class Driver {
     this.driverCoordinates = new Coordinates(xCoordinate, yCoordinate);
   }
 
+  public void assignDriverToRide() {
+    this.isAvailable = false;
+  }
+
   public Coordinates getCoordinates() {
     return driverCoordinates;
   }

@@ -10,7 +10,6 @@ public class RideDetails {
   private final String rideId;
   private final String riderId;
   private final String driverId;
-  private final BigDecimal rideBill;
   private final Long rideTime;
   private final BigDecimal rideDistanceInKm;
   private final Boolean isRideCompleted;

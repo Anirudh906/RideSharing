@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.geektrust.domain.internal.*;
 import com.example.geektrust.services.impl.RideServiceImpl;
-import java.math.BigDecimal;
 import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,6 @@ class RideServiceImplTest {
   private RideServiceImpl rideService;
   private DriverService driverService;
   private RiderService riderService;
-  private BillService billService;
 
   @BeforeEach
   void setUp() {
@@ -66,8 +64,7 @@ class RideServiceImplTest {
             riders.put(id, c);
           }
         };
-    billService = (distance, time) -> BigDecimal.valueOf(100);
-    rideService = new RideServiceImpl(driverService, riderService, billService);
+    rideService = new RideServiceImpl(driverService, riderService);
   }
 
   @Test

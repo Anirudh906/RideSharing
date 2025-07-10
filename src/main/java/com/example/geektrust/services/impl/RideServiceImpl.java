@@ -11,13 +11,10 @@ public class RideServiceImpl implements RideService {
   private final Map<String, Ride> rides;
   private final DriverService driverService;
   private final RiderService riderService;
-  private final BillService billService;
 
-  public RideServiceImpl(
-      DriverService driverService, RiderService riderService, BillService billService) {
+  public RideServiceImpl(DriverService driverService, RiderService riderService) {
     this.driverService = driverService;
     this.riderService = riderService;
-    this.billService = billService;
     this.rides = new HashMap<>();
   }
 
@@ -78,11 +75,15 @@ public class RideServiceImpl implements RideService {
       System.out.println(INVALID_RIDE);
       return;
     }
-    RideDetails details = ride.getRideDetails();
-    BigDecimal rideBill =
-        billService.getRideBill(details.getRideDistanceInKm(), details.getRideTime());
+    BigDecimal rideBill = ride.calculateBill();
     System.out.println(
-        GET_BILL_COMMAND + SPACE + rideId + SPACE + details.getDriverId() + SPACE + rideBill);
+        GET_BILL_COMMAND
+            + SPACE
+            + rideId
+            + SPACE
+            + ride.getRideDetails().getDriverId()
+            + SPACE
+            + rideBill);
   }
 
   private boolean isValidRideStart(Map<String, Driver> driversWithinRange, Integer nthDriver) {
@@ -99,7 +100,7 @@ public class RideServiceImpl implements RideService {
   private void assignDriverToRide(
       String rideId, String riderId, String driverId, Map<String, Driver> driversWithinRange) {
     Driver selectedDriver = driversWithinRange.get(driverId);
-    selectedDriver.updateAvailability(false);
+    selectedDriver.assignDriverToRide();
     rides.put(rideId, new Ride(rideId, riderId, driverId));
     System.out.println(RIDE_STARTED + SPACE + rideId);
   }
@@ -110,25 +111,21 @@ public class RideServiceImpl implements RideService {
 
   private RideDetails buildRideDetailsForCompletion(
       Ride ride, Coordinates endCoordinates, Long rideTime) {
-    String riderId = ride.getRideDetails().getRiderId();
-    Coordinates startCoordinates = riderService.getRiderCoordinates(riderId);
+    Coordinates startCoordinates =
+        riderService.getRiderCoordinates(ride.getRideDetails().getRiderId());
     BigDecimal rideDistance = getDistanceBetweenCoordinates(startCoordinates, endCoordinates);
-    BigDecimal rideBill = billService.getRideBill(rideDistance, rideTime);
     return new RideDetails(
         ride.getRideDetails().getRideId(),
-        riderId,
+        ride.getRideDetails().getRiderId(),
         ride.getRideDetails().getDriverId(),
-        rideBill,
         rideTime,
         rideDistance,
         true);
   }
 
   private void updateCoordinatesAfterRide(Ride ride, Coordinates endCoordinates) {
-    String riderId = ride.getRideDetails().getRiderId();
-    String driverId = ride.getRideDetails().getDriverId();
-    riderService.updateRiderCoordinates(riderId, endCoordinates);
-    driverService.updateDriverCoordinates(driverId, endCoordinates);
+    riderService.updateRiderCoordinates(ride.getRideDetails().getRiderId(), endCoordinates);
+    driverService.updateDriverCoordinates(ride.getRideDetails().getDriverId(), endCoordinates);
   }
 
   private PriorityQueue<DriverWithDistance> getNearestDriversQueue(
